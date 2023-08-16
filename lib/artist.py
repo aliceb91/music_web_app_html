@@ -6,7 +6,7 @@ class Artist():
         #   id: int
         #   name: string
         #   genre: string
-        self.id = 1
+        self.id = id
         self.name = name
         self.genre = genre
 
@@ -16,4 +16,4 @@ class Artist():
 
     def __repr__(self):
         # Returns a string when the object is called.
-        return f"{self.name}"
+        return f"Artist({self.id}, {self.name}, {self.genre})"

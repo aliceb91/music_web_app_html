@@ -7,7 +7,23 @@ def test_returns_list_of_artist_names(db_connection):
     db_connection.seed('seeds/artists_table.sql')
     repository = ArtistRepository(db_connection)
     result = repository.all()
-    assert result == 'Pixies, ABBA, Taylor Swift, Nina Simone'
+    name_list = []
+    for artist in result:
+        name_list.append(artist.name)
+    assert name_list == ['Pixies', 'ABBA', 'Taylor Swift', 'Nina Simone']
+
+def test_get_single_record(db_connection):
+    db_connection.seed("seeds/artists_table.sql")
+    repository = ArtistRepository(db_connection)
+    mock_artist = Mock()
+    mock_artist.id = 3
+    mock_artist.name = "Taylor Swift"
+    mock_artist.genre = "Pop"
+    artist = repository.find(3)
+
+    assert artist.id == mock_artist.id
+    assert artist.name == mock_artist.name
+    assert artist.genre == mock_artist.genre
 
 def test_create_new_artist(db_connection):
     # Given an artist object
@@ -19,4 +35,7 @@ def test_create_new_artist(db_connection):
     test_artist.genre = "Test genre"
     repository.create(test_artist)
     result = repository.all()
-    assert result == 'Pixies, ABBA, Taylor Swift, Nina Simone, Test name'
+    name_list = []
+    for artist in result:
+        name_list.append(artist.name)
+    assert name_list == ['Pixies', 'ABBA', 'Taylor Swift', 'Nina Simone', 'Test name']

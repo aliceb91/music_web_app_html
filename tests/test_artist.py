@@ -19,4 +19,4 @@ def test_returns_string_when_called():
     # Given an Artist object
     # It returns a given string when called.
     artist = Artist(1, "Hello", "Goodbye")
-    assert str(artist) == "Hello"
+    assert str(artist) == "Artist(1, Hello, Goodbye)"

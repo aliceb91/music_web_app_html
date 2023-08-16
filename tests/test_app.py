@@ -43,6 +43,40 @@ def test_visit_album_show_page(page, test_web_address, db_connection):
     p_tags = page.locator("p")
     expect(p_tags).to_have_text('Released: 1988')
 
+def test_get_single_artist(page, test_web_address, db_connection):
+    # Given a GET request with a given page parameter
+    # It returns the page for the corresponding artist.
+    db_connection.seed('seeds/artists_table.sql')
+    page.goto(f"http://{test_web_address}/artists/1")
+    h1_tags = page.locator("h1")
+    expect(h1_tags).to_have_text('Name: Pixies')
+    p_tags = page.locator("p")
+    expect(p_tags).to_have_text('Genre: Rock')
+
+def test_get_all_artists(page, test_web_address, db_connection):
+    # Given a GET request
+    # It returns a page with all artists.
+    db_connection.seed('seeds/artists_table.sql')
+    page.goto(f"http://{test_web_address}/artists")
+    div_tags = page.locator("div")
+    expect(div_tags).to_have_text([
+        'Name: Pixies\nGenre: Rock',
+        'Name: ABBA\nGenre: Pop',
+        'Name: Taylor Swift\nGenre: Pop',
+        'Name: Nina Simone\nGenre: Jazz',
+    ])
+
+def test_get_artist_page_on_click(page, test_web_address, db_connection):
+    # Given a GET request.
+    # It returns a page of artists, that direct to their respective pages when clicked.
+    db_connection.seed('seeds/artists_table.sql')
+    page.goto(f"http://{test_web_address}/artists")
+    page.click("text='Name: Taylor Swift'")
+    h1_tags = page.locator("h1")
+    expect(h1_tags).to_have_text('Name: Taylor Swift')
+    p_tags = page.locator("p")
+    expect(p_tags).to_have_text('Genre: Pop')
+
 # === Example Code Below ===
 
 """

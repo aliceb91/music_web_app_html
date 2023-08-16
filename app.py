@@ -31,6 +31,22 @@ def get_single_albums(id):
     album = repository.find(id)
     return render_template("show.html", album=album)
 
+@app.route('/artists/<id>', methods=['GET'])
+# Pulls a single artist from the repository and diaplays it's page.
+def get_single_artist(id):
+    connection = get_flask_database_connection(app)
+    repository = ArtistRepository(connection)
+    artist = repository.find(id)
+    return render_template("show_artist.html", artist=artist)
+
+@app.route('/artists', methods=['GET'])
+# Pulls all artists and displays them on a page.
+def get_all_artists():
+    connection = get_flask_database_connection(app)
+    repository = ArtistRepository(connection)
+    artists = repository.all()
+    return render_template("artists.html", artists=artists)
+
 # == Example Code Below ==
 
 # GET /emoji

@@ -15,8 +15,17 @@ class ArtistRepository():
         for row in rows:
             item = Artist(row["id"], row["name"], row['genre'])
             artists.append(item)
-        return str(artists)[1:-1]
+        return (artists)
+
+    def find(self, artist_id):
+        # Find a single artist by their id
+        rows = self._connection.execute(
+            'SELECT * from artists WHERE id = %s', [artist_id])
+        row = rows[0]
+        return Artist(row["id"], row["name"], row["genre"])
+
 
     def create(self, artist):
         # Adds a new artist entry to the database.
         self._connection.execute('INSERT INTO artists (name, genre) VALUES (%s, %s)', [artist.name, artist.genre])
+
