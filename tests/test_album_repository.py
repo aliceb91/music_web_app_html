@@ -24,3 +24,10 @@ def test_create_new_album(db_connection):
         Album(12, 'Ring Ring', 1973, 2),
         Album(13, 'Voyage', 2022, 2)
     ]
+
+def test_find_specific_album(db_connection):
+    db_connection.seed("seeds/albums_table.sql")
+    repository = AlbumRepository(db_connection)
+
+    album = repository.find(4)
+    assert album == Album(4, "Super Trouper", 1980, 2)

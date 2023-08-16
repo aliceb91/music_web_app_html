@@ -26,6 +26,22 @@ def test_get_all_albums(page, test_web_address, db_connection):
         'Title: Ring Ring\nReleased: 1973'
     ])
 
+def test_get_single_album_1(page, test_web_address, db_connection):
+    db_connection.seed("seeds/albums_table.sql")
+    page.goto(f"http://{test_web_address}/albums/1")
+    h1_tags = page.locator("h1")
+    expect(h1_tags).to_have_text('Title: Doolittle')
+    p_tags = page.locator("p")
+    expect(p_tags).to_have_text('Released: 1989')
+
+def test_visit_album_show_page(page, test_web_address, db_connection):
+    db_connection.seed('seeds/albums_table.sql')
+    page.goto(f"http://{test_web_address}/albums")
+    page.click("text='Title: Surfer Rosa'")
+    h1_tags = page.locator("h1")
+    expect(h1_tags).to_have_text('Title: Surfer Rosa')
+    p_tags = page.locator("p")
+    expect(p_tags).to_have_text('Released: 1988')
 
 # === Example Code Below ===
 

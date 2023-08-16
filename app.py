@@ -24,37 +24,12 @@ def get_albums():
     albums = repository.all()
     return render_template('albums.html', albums=albums)
 
-@app.route('/albums', methods=['POST'])
-def add_album_to_database():
-    # Given a body of album data
-    # It adds the data to the databse.
-    title = request.form['title']
-    release_year = request.form['release_year']
-    artist_id = request.form['artist_id']
+@app.route('/albums/<id>')
+def get_single_albums(id):
     connection = get_flask_database_connection(app)
-    album = Album(None, title, release_year, artist_id)
     repository = AlbumRepository(connection)
-    repository.create(album)
-    return ('', 200)
-
-@app.route('/artists', methods=['GET'])
-def get_all_artists():
-    # Given a GET request
-    # It returns a list of artist names.
-    connection = get_flask_database_connection(app)
-    repository = ArtistRepository(connection)
-    all_artists = repository.all()
-    return all_artists
-
-@app.route('/artists', methods=['POST'])
-def post_new_artist():
-    # Given a POST request
-    # It adds the artist to the database.
-    connection = get_flask_database_connection(app)
-    artist = Artist(None, request.form['name'], request.form['genre'])
-    repository = ArtistRepository(connection)
-    repository.create(artist)
-    return ('', 200)
+    album = repository.find(id)
+    return render_template("show.html", album=album)
 
 # == Example Code Below ==
 
