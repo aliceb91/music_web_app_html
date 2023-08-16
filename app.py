@@ -1,12 +1,60 @@
 import os
 from flask import Flask, request, render_template
 from lib.database_connection import get_flask_database_connection
+from lib.artist import Artist
+from lib.artist_repository import ArtistRepository
+from lib.album import Album
+from lib.album_repository import AlbumRepository
 
 # Create a new Flask app
 app = Flask(__name__)
 
 # == Your Routes Here ==
 
+@app.route('/albums', methods=['GET'])
+def get_albums():
+    # Given a GET request
+    # It returns all current albums in the databse.
+    #connection = get_flask_database_connection(app)
+    #repository = AlbumRepository(connection)
+    #all_albums = repository.all()
+    #return all_albums
+    connection = get_flask_database_connection(app)
+    repository = AlbumRepository(connection)
+    albums = repository.all()
+    return render_template('albums.html', albums=albums)
+
+@app.route('/albums', methods=['POST'])
+def add_album_to_database():
+    # Given a body of album data
+    # It adds the data to the databse.
+    title = request.form['title']
+    release_year = request.form['release_year']
+    artist_id = request.form['artist_id']
+    connection = get_flask_database_connection(app)
+    album = Album(None, title, release_year, artist_id)
+    repository = AlbumRepository(connection)
+    repository.create(album)
+    return ('', 200)
+
+@app.route('/artists', methods=['GET'])
+def get_all_artists():
+    # Given a GET request
+    # It returns a list of artist names.
+    connection = get_flask_database_connection(app)
+    repository = ArtistRepository(connection)
+    all_artists = repository.all()
+    return all_artists
+
+@app.route('/artists', methods=['POST'])
+def post_new_artist():
+    # Given a POST request
+    # It adds the artist to the database.
+    connection = get_flask_database_connection(app)
+    artist = Artist(None, request.form['name'], request.form['genre'])
+    repository = ArtistRepository(connection)
+    repository.create(artist)
+    return ('', 200)
 
 # == Example Code Below ==
 
